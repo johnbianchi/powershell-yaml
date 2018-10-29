@@ -28,9 +28,14 @@ function Get-YamlDocuments {
     )
     PROCESS {
         $stringReader = new-object System.IO.StringReader($Yaml)
+        $parser = New-Object "YamlDotNet.Core.Parser" $stringReader
+        $merging = New-Object "YamlDotNet.Core.MergingParser" $parser
+
         $yamlStream = New-Object "YamlDotNet.RepresentationModel.YamlStream"
-        $yamlStream.Load([System.IO.TextReader] $stringReader)
+        $yamlStream.Load([YamlDotNet.Core.IParser] $merging)
+
         $stringReader.Close()
+
         return $yamlStream
     }
 }
